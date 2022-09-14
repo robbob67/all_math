@@ -1,0 +1,213 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "normal_math",
+					"jsonFile" : "directory-normal_math-Debug-1ec36f6b65dd488ababb.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "normal_math",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "metal_math",
+					"jsonFile" : "directory-metal_math-Debug-8085517ecf9b4737e664.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "metal_math",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3
+					]
+				},
+				{
+					"build" : "metal_test",
+					"jsonFile" : "directory-metal_test-Debug-0513d4eb6103906b8dc1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "metal_test",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "metal_benchmark",
+					"jsonFile" : "directory-metal_benchmark-Debug-580dc4f491e35b77962e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "metal_benchmark",
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "metal_project"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "normal_math",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "metal_math",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "metal_test",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						4
+					],
+					"name" : "metal_benchmark",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "metalAirFile::@8fdac02718f0d9ff403c",
+					"jsonFile" : "target-metalAirFile-Debug-6ab4625d7e085e3f9409.json",
+					"name" : "metalAirFile",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "metalAirLibrary::@8fdac02718f0d9ff403c",
+					"jsonFile" : "target-metalAirLibrary-Debug-e1da7b4e0da1c418990d.json",
+					"name" : "metalAirLibrary",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "metal_benchmark::@fcff7750da5cb9d3c6f3",
+					"jsonFile" : "target-metal_benchmark-Debug-2759aebcef8d78719234.json",
+					"name" : "metal_benchmark",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "metal_math::@8fdac02718f0d9ff403c",
+					"jsonFile" : "target-metal_math-Debug-48fbf5a5b6c11c7b0789.json",
+					"name" : "metal_math",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "metal_test::@202899d65c01ffaa5451",
+					"jsonFile" : "target-metal_test-Debug-2c023130b4a17cbe6a61.json",
+					"name" : "metal_test",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "normal_math::@9b0f231fb379c54b1221",
+					"jsonFile" : "target-normal_math-Debug-5bfc4062754afbcab829.json",
+					"name" : "normal_math",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug",
+		"source" : "/Users/swhitton/CLionProjects/mymetal 3"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

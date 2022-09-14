@@ -1,0 +1,16 @@
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/normal_math/CMakeFiles/normal_math.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/normal_math/CMakeFiles/edit_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/normal_math/CMakeFiles/rebuild_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_math/CMakeFiles/metalAirFile.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_math/CMakeFiles/metalAirLibrary.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_math/CMakeFiles/metal_math.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_math/CMakeFiles/edit_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_math/CMakeFiles/rebuild_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_test/CMakeFiles/metal_test.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_test/CMakeFiles/edit_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_test/CMakeFiles/rebuild_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_benchmark/CMakeFiles/metal_benchmark.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_benchmark/CMakeFiles/edit_cache.dir
+/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_benchmark/CMakeFiles/rebuild_cache.dir
