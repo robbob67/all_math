@@ -5,43 +5,27 @@
 #include "metal.h"
 #include <memory>
 #include <iostream>
-#include <stdexcept>
-#include <exception>
 
 #include "normal.h"
 
-template<typename  T, typename A>
-class Vector: public std::vector<T, A>
+template<typename CONTAINER> requires containers::is_container_t<std::remove_reference_t<CONTAINER>>
+auto testVectorAddition(CONTAINER&& vector_one, CONTAINER&& vector_two, typename std::remove_reference_t<CONTAINER>& result, auto add_vectors) noexcept
 {
-public:
-    using std::vector<T, A>::vector;
-
-    Vector& operator=(const Vector& other)
+    add_vectors(vector_one, vector_two, result);
+    auto vector_one_iterator = vector_one.cbegin();
+    auto vector_two_iterator = vector_two.cbegin();
+    auto result_iterator = result.cbegin();
+    while(result_iterator != result.cend())
     {
-        std::cout << "copy assignment \n";
-        return std::vector<T, A>(std::forward<Vector>(other));
+        if ((*(result_iterator++)) != (*(vector_one_iterator++)) + (*(vector_two_iterator++)))
+            return false;
     }
-
-
-    Vector& operator=(Vector&& other)
+    if (vector_one_iterator != vector_one.cend() || vector_two_iterator != vector_two.cend())
     {
-        std::cout << "move assignment \n";
-        return std::vector<T, A>(std::forward<Vector>(other));
+        return false;
     }
-
-    Vector(const Vector& other)
-            : std::vector<T, A>(other)
-    {
-        std::cout << "copy constructor \n";
-    }
-
-    Vector(Vector&& other)
-    : std::vector<T, A>(std::forward<Vector>(other))
-    {
-        std::cout << "move constructor \n";
-
-    }
-};
+    return true;
+}
 
 int main(int argc, char *argv[])
 {//1073741824    536870912
@@ -65,14 +49,30 @@ int main(int argc, char *argv[])
     }();
 
 
+
     std::vector<int> result_x(5);
     normal_math::Math::add_two_vectors<std::vector<int>>({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}, result_x);
 
-    constexpr std::array<int, 5> y1 = {1, 2, 3, 4, 5};
-    constexpr std::array<int, 5> y2 = {1, 2, 3, 4, 5};
-    constexpr std::array<int, 5> result_y = {0};
-    normal_math::Math::add_two_vectors(y1, y2, result_y);
+    std::array<int, 5> y1 = {1, 2, 3, 4, 5};
+    std::array<int, 5> y2 = {1, 2, 3, 4, 5};
+    std::array<int, 5> result_y = {0};
+    //normal_math::Math::add_two_vectors(y1, y2, result_y);
+    std::cout << "RESULTS ARE: " << result_y[0] << " " << result_y[1] << " " << result_y[2] << " " << result_y[3] << "\n";
 
+    std::cout << "sanity check: " << testVectorAddition(y1, y2, result_y, [](auto&& arg_one, auto&& arg_two, auto& result){
+        normal_math::Math::add_two_vectors(std::forward<decltype(arg_one)>(arg_one), std::forward<decltype(arg_two)>(arg_two), result);
+    }) << "\n";
+
+
+    std::vector<int> y1V = {1, 2, 3, 4, 5};
+    std::vector<int> y2V = {1, 2, 3, 4, 5};
+    std::vector<int> result_yV = {0, 0, 0, 0, 0};
+    //normal_math::Math::add_two_vectors(y1V, y2V, result_yV);
+    //std::cout << "RESULTS ARE: " << result_y[0] << " " << result_y[1] << " " << result_y[2] << " " << result_y[3] << "\n";
+
+    std::cout << "sanity check vector: " << testVectorAddition(y1V, y2V, result_yV, [](auto&& arg_one, auto&& arg_two, auto& result){
+        normal_math::Math::add_two_vectors(std::forward<decltype(arg_one)>(arg_one), std::forward<decltype(arg_two)>(arg_two), result);
+    }) << "\n";
 
     /*try
     {
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
         std::cout << "Exception: " << e.what();
     }*/
 
-    std::cout << "starting first test\n";
+    /*std::cout << "starting first test\n";
     const auto result = metal::Math::add_two_vectors(vectorOne, vectorTwo);
     if(!(static_cast<int>(vectorOne[10] * vectorTwo[10] + vectorTwo[10] * vectorTwo[10] / 2 + 334 / vectorOne[10] * vectorTwo[10] + vectorTwo[10] * vectorTwo[10] / 2 + 334) == result[10]))
     {
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
             std::cout << "WRONG with: " << matrixResult[i] <<  "\n";
         }
     }
-
+*/
     //static auto multiply_two_matrices(CONTAINER&& matrix_one, CONTAINER&& matrix_two, std::size_t number_of_rows_vector_one, std::size_t number_of_rows_vector_two, std::size_t number_of_columns_vector_two)
 
 

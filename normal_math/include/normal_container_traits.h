@@ -9,15 +9,7 @@
 #include <array>
 #include <memory>
 
-namespace TEST
-{
-    void functionTest()
-    {
-
-    }
-}
-
-namespace normal_math {
+namespace containers {
 
     template<typename T>
     struct is_contiguous_container_t
@@ -38,7 +30,7 @@ namespace normal_math {
     };
 
     template<typename CONTAINER>
-    concept is_normal_container_t =
+    concept is_container_t =
     requires {
         typename std::remove_reference_t<CONTAINER>::value_type;
         typename std::remove_reference_t<CONTAINER>::const_iterator;
