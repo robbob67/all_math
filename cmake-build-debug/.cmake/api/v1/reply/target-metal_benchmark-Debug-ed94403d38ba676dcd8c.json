@@ -26,19 +26,31 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 26,
+				"line" : 28,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 27,
+				"line" : 29,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 32,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 33,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 29,
+				"line" : 31,
 				"parent" : 0
 			}
 		]
@@ -58,16 +70,21 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
-					"path" : "/opt/homebrew/include"
-				},
-				{
 					"backtrace" : 2,
 					"path" : "/Users/swhitton/CLionProjects/mymetal 3/metal_math/metal"
 				},
 				{
 					"backtrace" : 2,
 					"path" : "/Users/swhitton/CLionProjects/mymetal 3/metal_math/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/swhitton/CLionProjects/mymetal 3/normal_math/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/include"
 				}
 			],
 			"language" : "CXX",
@@ -87,6 +104,10 @@
 	],
 	"dependencies" : 
 	[
+		{
+			"backtrace" : 4,
+			"id" : "normal_math::@9b0f231fb379c54b1221"
+		},
 		{
 			"backtrace" : 2,
 			"id" : "metal_math::@8fdac02718f0d9ff403c"
@@ -112,6 +133,11 @@
 			{
 				"backtrace" : 2,
 				"fragment" : "metal_math/libmetal_math.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/opt/homebrew/lib/libbenchmark.a",
 				"role" : "libraries"
 			}
 		],

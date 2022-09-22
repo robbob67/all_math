@@ -23,6 +23,12 @@ namespace metal {
             return add_two_vectors("add_two_int_vectors", std::forward<CONTAINER>(vector_one), std::forward<CONTAINER>(vector_two));
         }
 
+        template<typename CONTAINER> requires is_base_container_t<std::remove_reference_t<CONTAINER>, int>
+        static auto add_two_vectors(CONTAINER&& vector_one, CONTAINER&& vector_two, typename std::remove_reference_t<CONTAINER>& result)
+        {
+            add_two_vectors("add_two_int_vectors", std::forward<CONTAINER>(vector_one), std::forward<CONTAINER>(vector_two), result);
+        }
+
         //matrix a is m (rows) x n (columns)
         //matrix b is n (rows) x b (columns)
         //matrix r is m (rows) x b (columns)
@@ -32,7 +38,30 @@ namespace metal {
             return multiply_two_matrices("multiply_two_int_matrices", std::forward<CONTAINER>(matrix_one), std::forward<CONTAINER>(matrix_two), number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two);
         }
 
+        template<typename CONTAINER> requires is_base_container_t<std::remove_reference_t<CONTAINER>, int>
+        static auto multiply_two_matrices(CONTAINER&& matrix_one, CONTAINER&& matrix_two, typename std::remove_reference_t<CONTAINER>& result, std::size_t number_of_rows_vector_one, std::size_t number_of_rows_vector_two, std::size_t number_of_columns_vector_two)
+        {
+             multiply_two_matrices("multiply_two_int_matrices", std::forward<CONTAINER>(matrix_one), std::forward<CONTAINER>(matrix_two), result, number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two);
+        }
+
     private:
+
+        template<typename CONTAINER> requires metal_container<std::remove_reference_t<CONTAINER>, typename std::remove_reference_t<CONTAINER>::value_type>
+        static auto multiply_two_matrices(auto functionName, CONTAINER&& matrix_one, CONTAINER&& matrix_two, typename std::remove_reference_t<CONTAINER>& result, std::size_t number_of_rows_vector_one, std::size_t number_of_rows_vector_two, std::size_t number_of_columns_vector_two) {
+            auto function = metal::GPU::create_function(functionName);
+            auto numberOfRowsVectorOne = std::vector<int, metal_allocator<int>>{static_cast<int>(number_of_rows_vector_one)};
+            auto numberOfRowsVectorTwo = std::vector<int, metal_allocator<int>>{static_cast<int>(number_of_rows_vector_two)};
+            auto numberOfColumnsVectorTwo = std::vector<int, metal_allocator<int>>{static_cast<int>(number_of_columns_vector_two)};
+
+            function.addParameter(matrix_one);
+            function.addParameter(matrix_two);
+            function.addParameter(numberOfRowsVectorOne);
+            function.addParameter(numberOfRowsVectorTwo);
+            function.addParameter(numberOfColumnsVectorTwo);
+            function.addParameter(result);
+            function.setGridSize(MTL::Size::Make(number_of_columns_vector_two, number_of_rows_vector_one, 1));
+            function.execute();
+        }
 
         template<typename CONTAINER> requires metal_container<std::remove_reference_t<CONTAINER>, typename std::remove_reference_t<CONTAINER>::value_type>
         static auto multiply_two_matrices(auto functionName, CONTAINER&& matrix_one, CONTAINER&& matrix_two, std::size_t number_of_rows_vector_one, std::size_t number_of_rows_vector_two, std::size_t number_of_columns_vector_two) {
@@ -70,6 +99,16 @@ namespace metal {
             function.setGridSize(MTL::Size::Make(vector_one.size(), 1, 1));
             function.execute();
             return metal_buffer;
+        }
+
+        template<typename CONTAINER> requires metal_container<std::remove_reference_t<CONTAINER>, typename std::remove_reference_t<CONTAINER>::value_type>
+        static auto add_two_vectors(auto functionName, CONTAINER&& vector_one, CONTAINER&& vector_two, typename std::remove_reference_t<CONTAINER>& result) {
+            auto function = metal::GPU::create_function(functionName);
+            function.addParameter(vector_one);
+            function.addParameter(vector_two);
+            function.addParameter(result);
+            function.setGridSize(MTL::Size::Make(vector_one.size(), 1, 1));
+            function.execute();
         }
 
         template<typename CONTAINER> requires non_metal_container<std::remove_reference_t<CONTAINER>, typename std::remove_reference_t<CONTAINER>::value_type>

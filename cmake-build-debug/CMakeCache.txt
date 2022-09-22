@@ -225,6 +225,9 @@ OpenMP_libomp_LIBRARY:FILEPATH=/opt/homebrew/lib/libomp.dylib
 //Path to the omp library for OpenMP
 OpenMP_omp_LIBRARY:FILEPATH=/opt/homebrew/lib/libomp.dylib
 
+//The directory containing a CMake configuration file for benchmark.
+benchmark_DIR:PATH=/opt/homebrew/lib/cmake/benchmark
+
 //Value Computed by CMake
 metal_benchmark_BINARY_DIR:STATIC=/Users/swhitton/CLionProjects/mymetal 3/cmake-build-debug/metal_benchmark
 
@@ -345,6 +348,10 @@ CMAKE_GENERATOR_INSTANCE:INTERNAL=
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Test CMAKE_HAVE_LIBC_PTHREAD
+CMAKE_HAVE_LIBC_PTHREAD:INTERNAL=1
+//Have include pthread.h
+CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/Users/swhitton/CLionProjects/mymetal 3
@@ -414,6 +421,8 @@ FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][TRUE][c ][v5.0()]
 FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_C:INTERNAL=[-Xclang -fopenmp][/opt/homebrew/lib/libomp.dylib][v5.0()]
 //Details about finding OpenMP_CXX
 FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp=libomp][/opt/homebrew/lib/libomp.dylib][v5.0()]
+//Details about finding Threads
+FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Result of TRY_COMPILE
 OpenMP_COMPILE_RESULT_CXX_fopenmplibomp:INTERNAL=TRUE
 //Result of TRY_COMPILE
