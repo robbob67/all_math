@@ -28,7 +28,7 @@ namespace {
                 std::cout << "could not load function" << std::endl;
                 // TODO: Proper error handling here
             } else {
-                std::cout << "did load function " << function->name()->utf8String() << std::endl;
+                //std::cout << "did load function " << function->name()->utf8String() << std::endl;
             }
             metalFunctionNSString->release();
             NS::Error* error = nullptr;

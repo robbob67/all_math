@@ -9,13 +9,13 @@
 #include "normal.h"
 
 template<typename CONTAINER> requires containers::is_container_t<std::remove_reference_t<CONTAINER>>
-auto testVectorAddition(CONTAINER&& vector_one, CONTAINER&& vector_two, typename std::remove_reference_t<CONTAINER>& result, auto add_vectors) noexcept
+auto testVectorAddition(CONTAINER&& vector_one, CONTAINER&& vector_two, auto add_vectors) noexcept
 {
-    add_vectors(vector_one, vector_two, result);
+    const auto result = add_vectors(vector_one, vector_two);
     auto vector_one_iterator = vector_one.cbegin();
     auto vector_two_iterator = vector_two.cbegin();
     auto result_iterator = result.cbegin();
-    while(result_iterator != result.cend())
+    while (result_iterator != result.cend())
     {
         if ((*(result_iterator++)) != (*(vector_one_iterator++)) + (*(vector_two_iterator++)))
             return false;
@@ -27,138 +27,66 @@ auto testVectorAddition(CONTAINER&& vector_one, CONTAINER&& vector_two, typename
     return true;
 }
 
+template<typename CONTAINER> requires containers::is_container_t<std::remove_reference_t<CONTAINER>>
+auto testMatrixMultiplication(CONTAINER&& matrix_one, CONTAINER&& matrix_two, std::size_t number_of_rows_vector_one, std::size_t number_of_rows_vector_two, std::size_t number_of_columns_vector_two, auto multiply_matricies) noexcept
+{
+    const auto result = multiply_matricies(matrix_one, matrix_two);
+    if (    matrix_one.size() != (number_of_rows_vector_one * number_of_rows_vector_two)
+        ||  matrix_two.size() != (number_of_columns_vector_two * number_of_rows_vector_two)
+        ||  result.size() != (number_of_rows_vector_one * number_of_columns_vector_two))
+    {
+        return false;
+    }
+    for(std::size_t b = 0; b < number_of_columns_vector_two; b++)
+    {
+        for(std::size_t m = 0; m < number_of_rows_vector_one; m++)
+        {
+            auto value = typename std::remove_reference_t<CONTAINER>::value_type{0};
+            for(std::size_t n = 0; n < number_of_rows_vector_two; n++)
+            {
+                value += matrix_one.at(m * number_of_rows_vector_two + n) * matrix_two.at(n * number_of_columns_vector_two + b);
+            }
+            if (result.at(m * number_of_columns_vector_two + b) != value) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 int main(int argc, char *argv[])
-{//1073741824    536870912
+{
+    const auto vector_one = std::vector<int>{1, 2, 3, 4, 5};
+    const auto vector_two = std::vector<int>{1, 2, 3, 4, 5};
 
-    constexpr auto size = std::size_t{536870912};
+    const auto vector_normal_result = testVectorAddition(vector_one, vector_two, [](auto&& vector_one, auto&& vector_two) -> std::remove_reference_t<decltype(vector_one)> {
+        return normal_math::Math::add_two_vectors(std::forward<decltype(vector_one)>(vector_one), std::forward<decltype(vector_two)>(vector_two));
+    });
 
-    auto vectorOne = [size](){
-        auto vectorOne = std::vector<int, metal::metal_allocator<int>>(size);
-        std::for_each(std::begin(vectorOne), std::end(vectorOne), [i = 0](auto& x) mutable {
-            x = i++ + 39;
-        });
-        return vectorOne;
-    }();
+    const auto vector_metal_result = testVectorAddition(vector_one, vector_two, [](auto&& vector_one, auto&& vector_two) -> std::remove_reference_t<decltype(vector_one)> {
+        return metal::Math::add_two_vectors(std::forward<decltype(vector_one)>(vector_one), std::forward<decltype(vector_two)>(vector_two));
+    });
 
-    auto vectorTwo = [size](){
-        auto vectorTwo = std::vector<int, metal::metal_allocator<int>>(size);
-        std::for_each(std::begin(vectorTwo), std::end(vectorTwo), [i = 0](auto& x) mutable {
-            x = i++ + 30;
-        });
-        return vectorTwo;
-    }();
+    std::cout << "result of [normal] test = " << vector_normal_result << "\n";
+    std::cout << "result of [metal] test = " << vector_metal_result << "\n";
 
+    const auto matrix_one = std::vector<int>{1, 2, 3, 4, 5, 6};
+    const auto matrix_two = std::vector<int>{1, 2, 3, 4, 5, 6};
+    const auto number_of_rows_vector_one = std::size_t{3};
+    const auto number_of_rows_vector_two = std::size_t{2};
+    const auto number_of_columns_vector_two = std::size_t{3};
 
+    const auto matrix_normal_result = testMatrixMultiplication(matrix_one, matrix_two, number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two, [number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two](auto&& matrix_one, auto&& matrix_two) -> std::remove_reference_t<decltype(matrix_two)> {
+        return normal_math::Math::multiply_two_matrices(std::forward<decltype(matrix_one)>(matrix_one), std::forward<decltype(matrix_two)>(matrix_two), number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two);
+    });
 
-    std::vector<int> result_x(5);
-    normal_math::Math::add_two_vectors<std::vector<int>>({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}, result_x);
+    const auto matrix_metal_result = testMatrixMultiplication(matrix_one, matrix_two, number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two, [number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two](auto&& matrix_one, auto&& matrix_two) -> std::remove_reference_t<decltype(matrix_two)> {
+        return metal::Math::multiply_two_matrices(std::forward<decltype(matrix_one)>(matrix_one), std::forward<decltype(matrix_two)>(matrix_two), number_of_rows_vector_one, number_of_rows_vector_two, number_of_columns_vector_two);
+    });
 
-    std::array<int, 5> y1 = {1, 2, 3, 4, 5};
-    std::array<int, 5> y2 = {1, 2, 3, 4, 5};
-    std::array<int, 5> result_y = {0};
-    //normal_math::Math::add_two_vectors(y1, y2, result_y);
-    std::cout << "RESULTS ARE: " << result_y[0] << " " << result_y[1] << " " << result_y[2] << " " << result_y[3] << "\n";
-
-    std::cout << "sanity check: " << testVectorAddition(y1, y2, result_y, [](auto&& arg_one, auto&& arg_two, auto& result){
-        normal_math::Math::add_two_vectors(std::forward<decltype(arg_one)>(arg_one), std::forward<decltype(arg_two)>(arg_two), result);
-    }) << "\n";
-
-
-    std::vector<int> y1V = {1, 2, 3, 4, 5};
-    std::vector<int> y2V = {1, 2, 3, 4, 5};
-    std::vector<int> result_yV = {0, 0, 0, 0, 0};
-    //normal_math::Math::add_two_vectors(y1V, y2V, result_yV);
-    //std::cout << "RESULTS ARE: " << result_y[0] << " " << result_y[1] << " " << result_y[2] << " " << result_y[3] << "\n";
-
-    std::cout << "sanity check vector: " << testVectorAddition(y1V, y2V, result_yV, [](auto&& arg_one, auto&& arg_two, auto& result){
-        normal_math::Math::add_two_vectors(std::forward<decltype(arg_one)>(arg_one), std::forward<decltype(arg_two)>(arg_two), result);
-    }) << "\n";
-
-    /*try
-    {
-        std::cout << "starting first test\n";
-        const auto result = metal::Math::add_two_vectors(vectorOne, vectorTwo);
-        if (result[5559] != vectorOne[5559] + vectorTwo[5559])
-        {
-            std::cout << "Error: " << "results not as expected\n";
-        }
-        std::cout << "result[5559] " << result[5559] << " should equal " << vectorOne[5559] + vectorTwo[5559] << std::endl;
-        std::cout << "finished first test\n";
-    }
-    catch(const std::runtime_error& e)
-    {
-        std::cout << "Exception: " << e.what();
-    }*/
-
-    /*std::cout << "starting first test\n";
-    const auto result = metal::Math::add_two_vectors(vectorOne, vectorTwo);
-    if(!(static_cast<int>(vectorOne[10] * vectorTwo[10] + vectorTwo[10] * vectorTwo[10] / 2 + 334 / vectorOne[10] * vectorTwo[10] + vectorTwo[10] * vectorTwo[10] / 2 + 334) == result[10]))
-    {
-        std::cout << "RIGHT\n";
-    }
-    else
-    {
-        std::cout << "WRONG\n";
-    }
-    std::cout << "finished first test\n";
-    std::cout << "starting second test\n";
-    auto second_result = [&vectorOne, &vectorTwo, index = 0](){
-        auto result = decltype(vectorOne)(vectorOne.size());
-        for(int i = 0; i < vectorOne.size(); i++)
-        {
-            result[i] = vectorOne[i] * vectorTwo[i] + vectorTwo[i] * vectorTwo[i] / 2 + 334 / vectorOne[i] * vectorTwo[i] + vectorTwo[i] * vectorTwo[i] / 2 + 334;
-        }
-        return result;
-    }();
-    std::cout << "finished second test\n";
-
-
-    auto matrixOne = std::vector<int, metal::metal_allocator<int>>(12); // 4x3
-    matrixOne[0] = 1;
-    matrixOne[1] = 1;
-    matrixOne[2] = 1;
-    matrixOne[3] = 1;
-    matrixOne[4] = 1;
-    matrixOne[5] = 1;
-    matrixOne[6] = 1;
-    matrixOne[7] = 1;
-    matrixOne[8] = 1;
-    matrixOne[9] = 1;
-    matrixOne[10] = 1;
-    matrixOne[11] = 1;
-    auto matrixTwo = std::vector<int, metal::metal_allocator<int>>(6); // 3x5
-    matrixTwo[0] = 1;
-    matrixTwo[1] = 1;
-    matrixTwo[2] = 1;
-    matrixTwo[3] = 1;
-    matrixTwo[4] = 1;
-    matrixTwo[5] = 1;
-    matrixTwo[6] = 1;
-    matrixTwo[7] = 1;
-    matrixTwo[8] = 1;
-    matrixTwo[9] = 1;
-    matrixTwo[10] = 1;
-    matrixTwo[11] = 1;
-    matrixTwo[12] = 1;
-    matrixTwo[13] = 1;
-    matrixTwo[14] = 1;
-
-    // result = 4x5
-    auto matrixResult = metal::Math::multiply_two_matrices(matrixOne, matrixTwo, 4, 3, 5);
-    if(matrixResult[19] == 233)
-    {
-        std::cout << "RIGHT\n";
-    }
-    else
-    {
-        for(int i = 0; i < 20; i++) {
-            std::cout << "WRONG with: " << matrixResult[i] <<  "\n";
-        }
-    }
-*/
-    //static auto multiply_two_matrices(CONTAINER&& matrix_one, CONTAINER&& matrix_two, std::size_t number_of_rows_vector_one, std::size_t number_of_rows_vector_two, std::size_t number_of_columns_vector_two)
-
-
+    std::cout << "matrix multiplication result of [normal] test = " << matrix_normal_result << "\n";
+    std::cout << "matrix multiplication result of [metal] test = " << matrix_metal_result << "\n";
 
     return 0;
 }

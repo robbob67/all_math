@@ -7,7 +7,8 @@ kernel void add_two_int_vectors(device const int* inA,
                        device int* result,
                        uint index [[thread_position_in_grid]])
 {
-    result[index] = inB[index] * inA[index] + inB[index] * inB[index] / 2 + 334 / inB[index] * inA[index] + inB[index] * inB[index] / 2 + 334;
+    result[index] = inA[index] + inB[index];
+            //inB[index] * inA[index] + inB[index] * inB[index] / 2 + 334 / inB[index] * inA[index] + inB[index] * inB[index] / 2 + 334;
 }
 
 kernel void multiply_two_int_matrices(const device int* inA [[buffer(0)]],
